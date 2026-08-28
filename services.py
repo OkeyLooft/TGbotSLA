@@ -1,6 +1,5 @@
 from dataclasses import asdict
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 
 from models import Ticket, TicketStatus
 from storage import TicketStorage
@@ -22,7 +21,7 @@ class TicketServices:
         return max(ids) + 1
 
     def ticket_created_at(self) -> str:
-        MSK = ZoneInfo("Europe/Moscow")
+        MSK = timezone(timedelta(hours=3), "MSK")
         create: datetime = datetime.now(MSK)
         created_at: str = create.strftime("%Y-%m-%d %H:%M:%S")
 
