@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class TicketStatus(Enum):
+class TicketStatus(str, Enum):
     OPEN = "OPEN"
     IN_PROGRESS = "IN_PROGRESS"
     CLOSED = "CLOSED"
