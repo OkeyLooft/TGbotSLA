@@ -3,8 +3,7 @@ from storage import TicketStorage
 
 
 class TicketHandlers:
-    def __init__(self, storage: TicketStorage, services: TicketServices):
-        self.storage = storage
+    def __init__(self, services: TicketServices):
         self.service = services
 
 
@@ -21,17 +20,6 @@ class TicketHandlers:
                 print(f"Неверное значение: {sla}. Значение может быть только целым числом. ")
         
         return name, description, sla
-
-    def agree_ticket(self, name, description, sla) -> str:
-        full_ticket = {
-            "NAME": name,
-            "DESCRIPTION": description,
-            "SLA": sla
-        }
-        for keys, items in full_ticket:
-            print(keys. items)
-        user_agree = input("Все верно ?y/N: ")
-        return user_agree
 
     def create_ticket(self):
         name, description, sla = self.input_ticket()
