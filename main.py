@@ -8,10 +8,9 @@ def main():
     utils.print_header_SLA()
 
     ticket = TicketHandlers(TicketServices(TicketStorage()))
-    service = TicketServices()
 
-    actions = {
+    actions: dict = {
         "1": ticket.create_ticket,
-        "2": service.show_ticket
+        "2": ticket.show_ticket
 }   
     
