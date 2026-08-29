@@ -1,6 +1,7 @@
 from dataclasses import asdict
 from datetime import datetime, timedelta, timezone
 
+import utils
 from models import Ticket, TicketStatus
 from storage import TicketStorage
 
@@ -51,3 +52,15 @@ class TicketServices:
         data = self.storage.read_json()
         data.append(asdict(ticket))
         self.storage.write_json(data)
+
+    def show_ticket(self) -> None:
+        utils.show_ticket_header()
+        data: dict = self.storage.read_json()
+        MSK = timezone(timedelta(hours=3), "MSK")
+        now_moscow_time: datetime = datetime.now(MSK)
+        for d in data:
+            dd: datetime = datetime.strptime(d["created_at"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=MSK)
+            hours_left: timedelta = dd - now_moscow_time
+            print(f"{d['id']:<3}|{d['name']:<15}|{d['status']:<13}|{hours_left}")
+
+    
