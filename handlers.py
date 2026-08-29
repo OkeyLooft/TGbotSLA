@@ -49,6 +49,3 @@ class TicketHandlers:
             description=description,
             sla=sla
         )
-
-ticket = TicketHandlers(TicketServices(TicketStorage()))
-ticket.create_ticket()
