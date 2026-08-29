@@ -13,3 +13,7 @@ def print_menu():
     print("5. Delete ticket")
     print("6. Check SLA")
     print("7. Exit")
+
+def show_ticket_header():
+    print("ID | NAME          | STATUS      | HOURS LEFT")
+    print(50 * '-')
