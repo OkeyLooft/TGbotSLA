@@ -11,6 +11,7 @@ def main():
 
     actions: dict = {
         "1": ticket.create_ticket,
-        "2": ticket.show_ticket
+        "2": ticket.show_ticket,
+        "3": ticket.find_ticket
 }   
     

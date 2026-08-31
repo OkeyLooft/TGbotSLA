@@ -22,3 +22,13 @@ def menu_find_ticket():
     print(50 * '-')
     print("1. ID \n2. NAME \n3. STATUS \n4. Exit ")
     print(50 * '-')
+
+def print_find_result(ticket):
+        print("-" * 50)
+        print(f"ID:          {ticket['id']}")
+        print(f"NAME:        {ticket['name']}")
+        print(f"DESCRIPTION: {ticket['description']}")
+        print(f"CREATED AT:  {ticket['created_at']}")
+        print(f"SLA:         {ticket['sla']}")
+        print(f"STATUS:      {ticket['status']}")
+        print("-" * 50)

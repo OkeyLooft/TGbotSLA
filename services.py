@@ -83,5 +83,14 @@ class TicketServices:
         data: dict = self.storage.read_json()
         data_by_find: list = [item for item in data if str(item.get(menu_find.lower())) == value]
         return data_by_find
-        
+    
+    def change_ticket(
+        self,
+        change_menu=change_menu):
+        data: list = self.storage.read_json()
+        models = TicketStatus()
+        for keys, values in models:
+            if values == change_menu:
+                final_status = keys
+
         
