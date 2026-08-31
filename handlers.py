@@ -101,26 +101,53 @@ class TicketHandlers:
         return menu_find
                     
     
-    def find_ticket_to_service(self):
+    def find_ticket(self):
         while True:
             menu_find:str = self.choice_find_menu()
             if menu_find == "Exit":
                 break
             elif menu_find == "STATUS":
                 while True:
-                    status_find: str = self.choice_find_status()
-                    if status_find == "Exit":
+                    value: str = self.choice_find_status()
+                    if value == "Exit":
                         break
                     else:
-                        value: str = input
-                        self.service.find_ticket(
-                            menu_find=status_find
+                        data_by_find: list = self.service.find_ticket(
+                            menu_find=menu_find,
+                            value=value
                         )
+                        self.find_ticket_print(data_by_find)
             else:
                 value: str = input(f"Введите {menu_find}")
-                self.service.find_ticket(
+                data_by_find: list = self.service.find_ticket(
                     menu_find=menu_find,
                     value=value
                 )
-        
+                self.find_ticket_print(data_by_find)
+    
+    def find_ticket_print(self, data_by_find):
+        for ticket in data_by_find:
+            utils.print_find_result(ticket)
+        input("Нажмите любую клавишу для продолжения... ")
 
+    def change_ticket(self):
+        status_menu: dict = {
+            "1": "OPEN",
+            "2": "IN_PROGRESS",
+            "3": "CLOSED",
+            "4": "EXPIRED",
+            "5": "Exit"
+        }
+        while True:
+            print(50 * '-')
+            print("1. OPEN \n2. IN_PROGRESS \n3. CLOSED \n4. EXPIRED \n5. Exit")
+            change_input: str = input("Введите номер статуса на который вы хотите изменить таск: ")
+            if change_input == "5":
+                break
+            change_menu: str = status_menu.get(change_input)
+            if change_menu:
+                if change_menu is None:
+                    print("Вы ввели неверное значение. Проверьте что ввели значение 1-5")
+                return 
+                
+            
