@@ -138,6 +138,7 @@ class TicketHandlers:
             "4": "EXPIRED",
             "5": "Exit"
         }
+        id_input: int = int(input("Введите номер таска"))
         while True:
             print(50 * '-')
             print("1. OPEN \n2. IN_PROGRESS \n3. CLOSED \n4. EXPIRED \n5. Exit")
@@ -145,9 +146,43 @@ class TicketHandlers:
             if change_input == "5":
                 break
             change_menu: str = status_menu.get(change_input)
-            if change_menu:
-                if change_menu is None:
-                    print("Вы ввели неверное значение. Проверьте что ввели значение 1-5")
-                return 
+            if change_menu is None:
+                print("Вы ввели неверное значение. Проверьте что ввели значение 1-5")
+            else:
+                ticket = self.service.change_ticket(
+                    change_menu=change_menu,
+                    id_input=id_input
+                )
+                print(f"Итоговый вид таска: {ticket}")
                 
+    def delete_ticket(self):
+        while True:
+            id_input: str = input("Введите ID таска для удаления(или Q): ").lower()
+            if id_input == "q":
+                break
+            while True:
+                try:
+                    id_input = int(id_input)
+                    break
+                except ValueError:
+                    print("Проверьте что ввели верный номер тикета")
+                    id_input: str = input("Введите ID таска для удаления(или Q): ").lower()
+            if id_input >= 0:
+                ticket = self.service.show_ticket_by_id(id_input=id_input)
+                print(ticket)
+                user_agree: str = input("Вы уверены ? [д/н] ")
+                if user_agree == "н":
+                    continue
+                elif user_agree == "д":
+                    self.service.delete_ticket(id_input=id_input)
+                else:
+                    print("Проверьте написание [д/н].")
+
+    def view_sla(self):
+        expired_ticket, ticket_left = self.service.view_sla()
+        print(expired_ticket)
+        print(ticket_left)
+
+
+
             
