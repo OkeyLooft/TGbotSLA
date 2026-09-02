@@ -15,7 +15,7 @@ def print_menu():
     print("7. Exit")
 
 def show_ticket_header():
-    print("ID | NAME          | STATUS      | HOURS LEFT")
+    print("ID |NAME          |STATUS      |HOURS LEFT")
     print(50 * '-')
 
 def menu_find_ticket():
