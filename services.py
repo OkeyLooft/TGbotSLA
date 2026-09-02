@@ -40,7 +40,8 @@ class TicketServices:
             description=description,
             created_at=self.ticket_created_at(),
             sla=sla,
-            status=TicketStatus.OPEN
+            status=TicketStatus.OPEN,
+            responsible=None #Добавил в тикет запись ответственного
         )
 
         self.write_ticket(ticket)
@@ -55,7 +56,7 @@ class TicketServices:
     def show_ticket(self) -> list[dict]:
         data: list = self.storage.read_json()
         MSK = timezone(timedelta(hours=3), "MSK")
-        now_moscow_time: datetime = datetime.now(MSK)
+        now_moscow_time: datetime = datetime.now(MSK).replace(microsecond=0) #Добавил метод удаления микросекунд
         ticket_list: list = []
         for ticket in data:
             dd: datetime = datetime.strptime(ticket["created_at"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=MSK)
@@ -69,7 +70,7 @@ class TicketServices:
                 "id": id_,
                 "name": name,
                 "status": status,
-                "hours_left": hours_left 
+                "hours_left": hours_left
             }
             ticket_list.append(ticket)
         return ticket_list
@@ -95,14 +96,17 @@ class TicketServices:
         self,
         change_menu,
         id_input
-        ):
+        ) -> Ticket:
         data: list = self.storage.read_json()
         data_by_id: list = [item for item in data if item.get('id') == id_input]
         try:
             data_by_id[0]['status'] = TicketStatus(change_menu)
             self.storage.write_json(data)
+            return data_by_id #Переместил return в try
         except IndexError:
-            print("Не верный ID")
+            return None #Заменил print на возврат None
+        #return data_by_id <-- был здесь
+
 
     def delete_ticket(
         self,
@@ -115,17 +119,20 @@ class TicketServices:
     def view_sla(self) -> list[str]:
         data: list = self.storage.read_json()
         MSK = timezone(timedelta(hours=3), "MSK")
-        now: datetime = datetime.now(MSK)
+        now: datetime = datetime.now(MSK).replace(microsecond=0) #Добавил метод удаления микросекунд
         print_data: list = []
         for ticket in data:
             created_at: datetime = datetime.strptime(ticket["created_at"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=MSK)
             sla_dur = timedelta(hours=ticket["sla"])
             dl: datetime = created_at + sla_dur
-            if now > dl:
+            if now >= dl:
                 expired_ticket: str = f"Тикет ID:{ticket['id']} просрочен"
+                if ticket['status'] != TicketStatus.EXPIRED and ticket['status'] != TicketStatus.CLOSED:
+                    ticket['status'] = TicketStatus.EXPIRED
                 print_data.append(expired_ticket)
             else:
                 time_left: timedelta = dl - now
                 ticket_left: str = f"У тикета ID:{ticket['id']} осталось: {time_left} "
                 print_data.append(ticket_left)
+        self.storage.write_json(data)
         return print_data
