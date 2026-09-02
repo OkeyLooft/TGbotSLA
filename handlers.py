@@ -59,7 +59,7 @@ class TicketHandlers:
             name: str = d["name"]
             status: str = d["status"]
             hours_left: timedelta = d["hours_left"]
-            print(f"{id_:<3}|{name:<15}|{status:<13}|{hours_left}")
+            print(f"{id_:<3}|{name:<14}|{status:<12}|{hours_left}")
 
 
     def choice_find_status(self) -> str:
@@ -118,7 +118,7 @@ class TicketHandlers:
                         )
                         self.find_ticket_print(data_by_find)
             else:
-                value: str = input(f"Введите {menu_find}")
+                value: str = input(f"Введите {menu_find}: ")
                 data_by_find: list = self.service.find_ticket(
                     menu_find=menu_find,
                     value=value
@@ -138,7 +138,7 @@ class TicketHandlers:
             "4": "EXPIRED",
             "5": "Exit"
         }
-        id_input: int = int(input("Введите номер таска"))
+        id_input: int = int(input("Введите номер таска: "))
         while True:
             print(50 * '-')
             print("1. OPEN \n2. IN_PROGRESS \n3. CLOSED \n4. EXPIRED \n5. Exit")
@@ -153,8 +153,13 @@ class TicketHandlers:
                     change_menu=change_menu,
                     id_input=id_input
                 )
-                print(f"Итоговый вид таска: {ticket}")
+                if ticket is None:
+                    print("Не верный ID")
+                else:
+                    print(50 * "-")
+                    print(f"Итоговый вид таска: {ticket}")
                 
+            
     def delete_ticket(self):
         while True:
             id_input: str = input("Введите ID таска для удаления(или Q): ").lower()
@@ -179,9 +184,9 @@ class TicketHandlers:
                     print("Проверьте написание [д/н].")
 
     def view_sla(self):
-        expired_ticket, ticket_left = self.service.view_sla()
-        print(expired_ticket)
-        print(ticket_left)
+        print_data: list[str] = self.service.view_sla()
+        for ticket in print_data:
+            print(ticket)
 
 
 
