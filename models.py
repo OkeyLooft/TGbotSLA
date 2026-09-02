@@ -16,3 +16,4 @@ class Ticket:
     created_at: str
     sla: int
     status: TicketStatus
+    responsible: int | None
